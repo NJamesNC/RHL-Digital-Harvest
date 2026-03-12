@@ -84,9 +84,7 @@ function Nav() {
     }}>
       <div style={{ maxWidth: 1080, margin: "0 auto", display: "flex", alignItems: "center", justifyContent: "space-between", height: 68 }}>
         <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-          <div style={{ width: 32, height: 32, background: COLORS.gold, borderRadius: "50%", display: "flex", alignItems: "center", justifyContent: "center" }}>
-            <span style={{ color: COLORS.black, fontSize: 14, fontWeight: 700 }}>R</span>
-          </div>
+          <img src="/rhl-logo.png" alt="RHL Digital" style={{ height: 40, width: 40, objectFit: "contain" }} />
           <span style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 20, fontWeight: 700, color: scrolled ? COLORS.black : COLORS.white }}>RHL Digital</span>
         </div>
         <div style={{ display: "flex", gap: 32, alignItems: "center" }}>
