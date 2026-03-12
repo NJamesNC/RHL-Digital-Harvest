@@ -113,6 +113,7 @@ function Hero() {
       position: "relative",
       overflow: "hidden",
     }}>
+      {/* Decorative circles */}
       <div style={{ position: "absolute", top: "10%", right: "8%", width: 320, height: 320, borderRadius: "50%", border: `1px solid rgba(201,160,48,0.15)`, pointerEvents: "none" }} />
       <div style={{ position: "absolute", top: "15%", right: "12%", width: 200, height: 200, borderRadius: "50%", border: `1px solid rgba(0,150,199,0.2)`, pointerEvents: "none" }} />
       <div style={{ position: "absolute", bottom: "20%", left: "5%", width: 150, height: 150, borderRadius: "50%", background: `radial-gradient(circle, rgba(201,160,48,0.08) 0%, transparent 70%)`, pointerEvents: "none" }} />
@@ -120,7 +121,7 @@ function Hero() {
       <div className="container" style={{ paddingTop: 100 }}>
         <div className="fade-up" style={{ maxWidth: 680 }}>
           <div className="tag" style={{ background: "rgba(201,160,48,0.15)", color: COLORS.gold }}>
-            AI Voice Receptionist
+            🎙️ AI Voice Receptionist
           </div>
           <h1 style={{
             fontSize: "clamp(42px, 6vw, 76px)",
@@ -140,12 +141,13 @@ function Hero() {
             Your AI receptionist answers every call, books appointments, and captures leads — 24 hours a day, 7 days a week. Built for small businesses ready to grow without the overhead.
           </p>
           <div style={{ display: "flex", gap: 16, flexWrap: "wrap" }}>
-            <a href="#trial"><button className="cta-primary" style={{ fontSize: 17, padding: "18px 42px" }}>Start 3-Day Free Trial</button></a>
-            <a href="#demo"><button className="cta-outline" style={{ fontSize: 17, padding: "16px 40px" }}>Hear Aria Live</button></a>
+            <a href="#trial"><button className="cta-primary" style={{ fontSize: 17, padding: "18px 42px" }}>Start 3-Day Free Trial →</button></a>
+            <a href="#demo"><button className="cta-outline" style={{ fontSize: 17, padding: "16px 40px" }}>🎧 Hear Aria Live</button></a>
           </div>
           <p style={{ color: "rgba(255,255,255,0.35)", fontSize: 13, marginTop: 16 }}>No credit card required. No long-term contracts.</p>
         </div>
 
+        {/* Stats row */}
         <div style={{ display: "flex", gap: 48, marginTop: 80, paddingTop: 48, borderTop: "1px solid rgba(255,255,255,0.08)", flexWrap: "wrap" }}>
           {[["24/7", "Always answering"], ["3-Day", "Free trial"], ["< 60s", "Setup time"], ["$0", "Missed calls cost"]].map(([n, l]) => (
             <div key={n}>
@@ -296,7 +298,7 @@ function Pricing() {
             }}>
               {highlight && (
                 <div style={{ position: "absolute", top: -14, left: "50%", transform: "translateX(-50%)", background: COLORS.gold, color: COLORS.black, fontSize: 12, fontWeight: 700, padding: "4px 16px", borderRadius: 100, whiteSpace: "nowrap", letterSpacing: "0.08em" }}>
-                  MOST POPULAR
+                  ✦ MOST POPULAR
                 </div>
               )}
               <div style={{ fontSize: 14, fontWeight: 600, color: highlight ? COLORS.gold : COLORS.blue, letterSpacing: "0.08em", textTransform: "uppercase", marginBottom: 8 }}>{name}</div>
@@ -310,18 +312,16 @@ function Pricing() {
                   </div>
                 ))}
               </div>
-              <a href="#trial" style={{ textDecoration: "none" }}>
-                <button
-                  className={highlight ? "cta-primary" : ""}
-                  style={!highlight ? {
-                    width: "100%", padding: "14px", border: `2px solid ${COLORS.black}`, background: "transparent",
-                    borderRadius: 4, fontFamily: "'DM Sans', sans-serif", fontWeight: 600, fontSize: 15, cursor: "pointer",
-                    transition: "all 0.2s",
-                  } : { width: "100%", padding: "16px", fontSize: 15 }}
-                  onMouseEnter={e => { if (!highlight) { (e.currentTarget as HTMLButtonElement).style.background = COLORS.black; (e.currentTarget as HTMLButtonElement).style.color = COLORS.white; } }}
-                  onMouseLeave={e => { if (!highlight) { (e.currentTarget as HTMLButtonElement).style.background = "transparent"; (e.currentTarget as HTMLButtonElement).style.color = COLORS.black; } }}
-                >{cta}</button>
-              </a>
+              <button
+                className={highlight ? "cta-primary" : ""}
+                style={!highlight ? {
+                  width: "100%", padding: "14px", border: `2px solid ${COLORS.black}`, background: "transparent",
+                  borderRadius: 4, fontFamily: "'DM Sans', sans-serif", fontWeight: 600, fontSize: 15, cursor: "pointer",
+                  transition: "all 0.2s",
+                } : { width: "100%", padding: "16px", fontSize: 15 }}
+                onMouseEnter={e => { if (!highlight) { e.currentTarget.style.background = COLORS.black; e.currentTarget.style.color = COLORS.white; } }}
+                onMouseLeave={e => { if (!highlight) { e.currentTarget.style.background = "transparent"; e.currentTarget.style.color = COLORS.black; } }}
+              >{cta}</button>
             </div>
           ))}
         </div>
@@ -332,12 +332,11 @@ function Pricing() {
 
 function DemoSection() {
   const [messages, setMessages] = useState([
-    { role: "assistant", content: "Hi! I'm Aria, RHL Digital's AI receptionist demo. Ask me anything about our services, pricing, or how I work for businesses like yours!" }
+    { role: "assistant", content: "Hi! I'm Aria, RHL Digital's AI receptionist demo. Ask me anything about our services, pricing, or how I work for businesses like yours! 👋" }
   ]);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
-  const [conversationId, setConversationId] = useState<number | null>(null);
-  const bottomRef = useRef<HTMLDivElement>(null);
+  const bottomRef = useRef(null);
 
   useEffect(() => { bottomRef.current?.scrollIntoView({ behavior: "smooth" }); }, [messages]);
 
@@ -348,70 +347,34 @@ function DemoSection() {
     setMessages(newMessages);
     setInput("");
     setLoading(true);
-
     try {
-      let convId = conversationId;
-
-      if (!convId) {
-        const convRes = await fetch("/api/chat/conversations", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ visitorId: `demo-${Date.now()}` }),
-        });
-        const convData = await convRes.json();
-        convId = convData.id;
-        setConversationId(convId);
-      }
-
-      const msgRes = await fetch(`/api/chat/conversations/${convId}/messages`, {
+      const res = await fetch("https://api.anthropic.com/v1/messages", {
         method: "POST",
-        headers: { "Content-Type": "application/json", "Accept": "text/event-stream" },
-        body: JSON.stringify({ content: input.trim() }),
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          model: "claude-sonnet-4-20250514",
+          max_tokens: 1000,
+          system: `You are Aria, the AI receptionist for RHL Digital — a San Antonio-based company that provides AI voice receptionists and automated business websites to small businesses. You are friendly, professional, warm, and concise. 
+
+Key info:
+- RHL Digital offers 3 plans: Starter ($297/mo: website + CRM + booking), Growth ($497/mo: adds 24/7 AI voice receptionist), Done-For-You ($997/mo: full white-glove service)
+- 3-day free trial, no contracts, cancel anytime
+- The AI receptionist (Aria) answers calls 24/7, books appointments, captures leads
+- Founded by James under Reflect His Light LLC — faith-motivated, integrity-driven
+- Target customers: home service contractors, medical/dental, restaurants, any local small business
+- Phone demo: coming soon
+- Website: rhldigital.com
+
+Keep responses under 3 sentences unless a longer answer is clearly needed. Be warm and helpful like a real receptionist.`,
+          messages: newMessages.map(m => ({ role: m.role, content: m.content })),
+        }),
       });
-
-      const reader = msgRes.body?.getReader();
-      const decoder = new TextDecoder();
-      let reply = "";
-
-      setMessages(prev => [...prev, { role: "assistant", content: "" }]);
-
-      if (reader) {
-        while (true) {
-          const { done, value } = await reader.read();
-          if (done) break;
-          const chunk = decoder.decode(value);
-          const lines = chunk.split("\n");
-          for (const line of lines) {
-            if (line.startsWith("data: ")) {
-              const data = line.slice(6).trim();
-              if (data === "[DONE]") break;
-              try {
-                const parsed = JSON.parse(data);
-                if (parsed.content) {
-                  reply += parsed.content;
-                  setMessages(prev => {
-                    const updated = [...prev];
-                    updated[updated.length - 1] = { role: "assistant", content: reply };
-                    return updated;
-                  });
-                }
-              } catch {}
-            }
-          }
-        }
-      }
-
-      if (!reply) {
-        setMessages(prev => {
-          const updated = [...prev];
-          updated[updated.length - 1] = { role: "assistant", content: "I'm having a moment! Try refreshing and chatting again." };
-          return updated;
-        });
-      }
+      const data = await res.json();
+      const reply = data.content?.[0]?.text || "Sorry, I had trouble responding. Please try again!";
+      setMessages(prev => [...prev, { role: "assistant", content: reply }]);
     } catch {
       setMessages(prev => [...prev, { role: "assistant", content: "I'm having a moment! Try refreshing and chatting again." }]);
     }
-
     setLoading(false);
   };
 
@@ -435,6 +398,7 @@ function DemoSection() {
             </div>
           </div>
 
+          {/* Chat widget */}
           <div style={{ background: COLORS.white, borderRadius: 16, boxShadow: "0 8px 48px rgba(0,0,0,0.12)", overflow: "hidden" }}>
             <div style={{ background: COLORS.black, padding: "16px 20px", display: "flex", alignItems: "center", gap: 12 }}>
               <div style={{ width: 36, height: 36, borderRadius: "50%", background: COLORS.gold, display: "flex", alignItems: "center", justifyContent: "center", fontWeight: 700, fontSize: 16 }}>A</div>
@@ -457,10 +421,10 @@ function DemoSection() {
                     borderRadius: m.role === "user" ? "12px 12px 2px 12px" : "12px 12px 12px 2px",
                     fontSize: 14,
                     lineHeight: 1.6,
-                  }}>{m.content || <span style={{ opacity: 0.4 }}>•••</span>}</div>
+                  }}>{m.content}</div>
                 </div>
               ))}
-              {loading && messages[messages.length - 1]?.role !== "assistant" && (
+              {loading && (
                 <div style={{ display: "flex", justifyContent: "flex-start" }}>
                   <div style={{ background: COLORS.gray, padding: "10px 16px", borderRadius: "12px 12px 12px 2px", fontSize: 20, letterSpacing: 4 }}>•••</div>
                 </div>
@@ -475,7 +439,7 @@ function DemoSection() {
                 placeholder="Ask Aria anything..."
                 style={{ flex: 1, border: `1px solid ${COLORS.grayMid}`, borderRadius: 8, padding: "10px 14px", fontFamily: "'DM Sans', sans-serif", fontSize: 14, outline: "none" }}
               />
-              <button onClick={send} disabled={loading} style={{ background: COLORS.blue, color: COLORS.white, border: "none", borderRadius: 8, padding: "10px 16px", cursor: "pointer", fontWeight: 600, fontSize: 14, opacity: loading ? 0.6 : 1 }}>Send</button>
+              <button onClick={send} style={{ background: COLORS.blue, color: COLORS.white, border: "none", borderRadius: 8, padding: "10px 16px", cursor: "pointer", fontWeight: 600, fontSize: 14 }}>Send</button>
             </div>
           </div>
         </div>
@@ -486,29 +450,7 @@ function DemoSection() {
 
 function LeadCapture() {
   const [submitted, setSubmitted] = useState(false);
-  const [loading, setLoading] = useState(false);
   const [form, setForm] = useState({ name: "", business: "", phone: "", email: "" });
-
-  const handleSubmit = async () => {
-    if (!form.name || !form.email || !form.phone || !form.business) return;
-    setLoading(true);
-    try {
-      await fetch("/api/trial-signups", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          fullName: form.name,
-          email: form.email,
-          phone: form.phone,
-          businessName: form.business,
-          businessType: "General",
-        }),
-      });
-    } catch {}
-    setLoading(false);
-    setSubmitted(true);
-  };
-
   return (
     <section className="section" id="trial" style={{ background: COLORS.black }}>
       <div className="container" style={{ maxWidth: 640, textAlign: "center" }}>
@@ -520,12 +462,12 @@ function LeadCapture() {
         {!submitted ? (
           <div style={{ display: "flex", flexDirection: "column", gap: 14, textAlign: "left" }}>
             {[["name", "Your Name", "text"], ["business", "Business Name", "text"], ["phone", "Phone Number", "tel"], ["email", "Email Address", "email"]].map(([key, ph, type]) => (
-              <input key={key} type={type} placeholder={ph} value={form[key as keyof typeof form]} onChange={e => setForm({ ...form, [key]: e.target.value })}
+              <input key={key} type={type} placeholder={ph} value={form[key]} onChange={e => setForm({ ...form, [key]: e.target.value })}
                 style={{ padding: "14px 18px", borderRadius: 6, border: "1px solid rgba(255,255,255,0.15)", background: "rgba(255,255,255,0.06)", color: COLORS.white, fontFamily: "'DM Sans', sans-serif", fontSize: 15, outline: "none" }}
               />
             ))}
-            <button className="cta-primary" onClick={handleSubmit} disabled={loading} style={{ marginTop: 8, padding: "18px", fontSize: 17, opacity: loading ? 0.7 : 1 }}>
-              {loading ? "Sending..." : "Claim My Free Trial →"}
+            <button className="cta-primary" onClick={() => setSubmitted(true)} style={{ marginTop: 8, padding: "18px", fontSize: 17 }}>
+              Claim My Free Trial →
             </button>
             <p style={{ color: "rgba(255,255,255,0.25)", fontSize: 12, textAlign: "center" }}>By submitting, you agree to be contacted by RHL Digital. We respect your privacy.</p>
           </div>
