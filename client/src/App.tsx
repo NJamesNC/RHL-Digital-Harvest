@@ -208,13 +208,20 @@ function Problem() {
 
 function RevenueCalculator() {
   const [missedCalls, setMissedCalls] = useState(7);
-  const avgJobValue = 350;
+  const [jobValueInput, setJobValueInput] = useState("150");
   const conversionRate = 0.68;
+
+  const avgJobValue = Math.max(1, parseInt(jobValueInput.replace(/\D/g, ""), 10) || 0);
   const monthlyLost = Math.round(missedCalls * 4.3 * avgJobValue * conversionRate);
   const annualLost = monthlyLost * 12;
 
   const fmt = (n: number) =>
     n >= 1000 ? `$${(n / 1000).toFixed(1)}k` : `$${n}`;
+
+  const handleJobValue = (val: string) => {
+    const digits = val.replace(/\D/g, "");
+    setJobValueInput(digits);
+  };
 
   return (
     <section className="section" style={{ background: `linear-gradient(160deg, #0d0d1a 0%, #0a1628 100%)` }}>
@@ -225,32 +232,66 @@ function RevenueCalculator() {
             How Much Is This Costing You?
           </h2>
           <p style={{ color: "rgba(255,255,255,0.5)", fontSize: 16, maxWidth: 520, margin: "0 auto" }}>
-            Drag the slider to match your business. See the real cost of every unanswered call.
+            Enter your numbers below and see the real cost of every unanswered call.
           </p>
         </div>
 
-        {/* Slider */}
         <div style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.08)", borderRadius: 20, padding: "48px 40px" }}>
-          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: 12 }}>
-            <span style={{ color: "rgba(255,255,255,0.6)", fontSize: 14 }}>Missed calls per week</span>
-            <span style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 42, fontWeight: 700, color: COLORS.gold }}>{missedCalls}</span>
+
+          {/* Job value input */}
+          <div style={{ marginBottom: 40 }}>
+            <label style={{ display: "block", color: "rgba(255,255,255,0.6)", fontSize: 14, marginBottom: 12 }}>
+              Average value of a new job or customer ($)
+            </label>
+            <div style={{ position: "relative", maxWidth: 260 }}>
+              <span style={{ position: "absolute", left: 16, top: "50%", transform: "translateY(-50%)", color: COLORS.gold, fontSize: 20, fontWeight: 700, pointerEvents: "none" }}>$</span>
+              <input
+                type="text"
+                inputMode="numeric"
+                value={jobValueInput}
+                onChange={e => handleJobValue(e.target.value)}
+                placeholder="150"
+                style={{
+                  width: "100%",
+                  padding: "14px 18px 14px 36px",
+                  borderRadius: 8,
+                  border: `1px solid rgba(201,160,48,0.4)`,
+                  background: "rgba(255,255,255,0.06)",
+                  color: COLORS.white,
+                  fontFamily: "'Cormorant Garamond', serif",
+                  fontSize: 28,
+                  fontWeight: 700,
+                  outline: "none",
+                }}
+              />
+            </div>
+            <p style={{ color: "rgba(255,255,255,0.25)", fontSize: 12, marginTop: 8 }}>
+              e.g. $150 for a cleaning job, $400 for HVAC, $800 for a dental visit
+            </p>
           </div>
 
-          <input
-            type="range"
-            min={1}
-            max={50}
-            value={missedCalls}
-            onChange={e => setMissedCalls(Number(e.target.value))}
-            style={{ width: "100%", accentColor: COLORS.gold, cursor: "pointer", height: 6, marginBottom: 8 }}
-          />
-          <div style={{ display: "flex", justifyContent: "space-between" }}>
-            <span style={{ color: "rgba(255,255,255,0.25)", fontSize: 12 }}>1 call/week</span>
-            <span style={{ color: "rgba(255,255,255,0.25)", fontSize: 12 }}>50 calls/week</span>
+          {/* Missed calls slider */}
+          <div style={{ marginBottom: 40 }}>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: 12 }}>
+              <label style={{ color: "rgba(255,255,255,0.6)", fontSize: 14 }}>Missed calls per week</label>
+              <span style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 42, fontWeight: 700, color: COLORS.gold }}>{missedCalls}</span>
+            </div>
+            <input
+              type="range"
+              min={1}
+              max={50}
+              value={missedCalls}
+              onChange={e => setMissedCalls(Number(e.target.value))}
+              style={{ width: "100%", accentColor: COLORS.gold, cursor: "pointer", height: 6, marginBottom: 8 }}
+            />
+            <div style={{ display: "flex", justifyContent: "space-between" }}>
+              <span style={{ color: "rgba(255,255,255,0.25)", fontSize: 12 }}>1 / week</span>
+              <span style={{ color: "rgba(255,255,255,0.25)", fontSize: 12 }}>50 / week</span>
+            </div>
           </div>
 
           {/* Results */}
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 20, marginTop: 40 }}>
+          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 20 }}>
             <div style={{ background: "rgba(201,160,48,0.08)", border: `1px solid rgba(201,160,48,0.2)`, borderRadius: 14, padding: "28px 24px", textAlign: "center" }}>
               <div style={{ color: "rgba(255,255,255,0.45)", fontSize: 12, fontWeight: 600, letterSpacing: "0.1em", textTransform: "uppercase", marginBottom: 10 }}>Lost per Month</div>
               <div style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 52, fontWeight: 700, color: COLORS.gold, lineHeight: 1 }}>{fmt(monthlyLost)}</div>
@@ -263,10 +304,10 @@ function RevenueCalculator() {
             </div>
           </div>
 
-          <div style={{ marginTop: 32, padding: "16px 20px", background: "rgba(255,255,255,0.03)", borderRadius: 10, display: "flex", gap: 12, alignItems: "flex-start" }}>
-            <span style={{ color: COLORS.gold, fontSize: 16, flexShrink: 0, marginTop: 2 }}>ℹ</span>
-            <p style={{ color: "rgba(255,255,255,0.35)", fontSize: 12, lineHeight: 1.7, margin: 0 }}>
-              Based on an average job value of ${avgJobValue} and a 68% caller conversion rate for home service businesses. Your actual numbers may vary.
+          <div style={{ marginTop: 28, padding: "14px 18px", background: "rgba(255,255,255,0.03)", borderRadius: 10, display: "flex", gap: 10, alignItems: "flex-start" }}>
+            <span style={{ color: COLORS.gold, fontSize: 15, flexShrink: 0, marginTop: 1 }}>ℹ</span>
+            <p style={{ color: "rgba(255,255,255,0.3)", fontSize: 12, lineHeight: 1.7, margin: 0 }}>
+              Based on a 68% caller conversion rate for local service businesses. Your actual numbers may vary.
             </p>
           </div>
 
