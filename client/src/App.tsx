@@ -207,30 +207,23 @@ function Problem() {
 }
 
 function RevenueCalculator() {
-  const SLIDER_MIN = 50;
-  const SLIDER_MAX = 3000;
-  const [monthlyLost, setMonthlyLost] = useState(150);
-  const [inputText, setInputText] = useState("150");
+  const MISSED_PER_MONTH = 4;
+  const MONTHS_MIN = 1;
+  const MONTHS_MAX = 36;
 
-  const annualLost = monthlyLost * 12;
+  const [callValueInput, setCallValueInput] = useState("150");
+  const [months, setMonths] = useState(12);
+
+  const callValue = Math.max(0, parseInt(callValueInput.replace(/\D/g, ""), 10) || 0);
+  const monthlyLost = callValue * MISSED_PER_MONTH;
+  const totalLost = monthlyLost * months;
 
   const fmt = (n: number) =>
     n >= 1000 ? `$${(n / 1000).toFixed(1)}k` : `$${n}`;
 
-  const handleSlider = (val: number) => {
-    setMonthlyLost(val);
-    setInputText(String(val));
+  const handleCallValue = (val: string) => {
+    setCallValueInput(val.replace(/\D/g, ""));
   };
-
-  const handleInput = (val: string) => {
-    const digits = val.replace(/\D/g, "");
-    setInputText(digits);
-    const num = parseInt(digits, 10) || 0;
-    setMonthlyLost(num);
-  };
-
-  const sliderVal = Math.min(Math.max(monthlyLost, SLIDER_MIN), SLIDER_MAX);
-  const sliderPct = ((sliderVal - SLIDER_MIN) / (SLIDER_MAX - SLIDER_MIN)) * 100;
 
   return (
     <section className="section" style={{ background: `linear-gradient(160deg, #0d0d1a 0%, #0a1628 100%)` }}>
@@ -241,24 +234,27 @@ function RevenueCalculator() {
             How Much Is This Costing You?
           </h2>
           <p style={{ color: "rgba(255,255,255,0.5)", fontSize: 16, maxWidth: 540, margin: "0 auto" }}>
-            Drag the slider or type your own number. See exactly what missed calls are costing you.
+            Enter what a typical call is worth, then drag to see how the losses compound over time.
           </p>
         </div>
 
         <div style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.08)", borderRadius: 20, padding: "48px 40px" }}>
 
-          {/* Label + input in one row */}
-          <div style={{ marginBottom: 28 }}>
+          {/* Per-call value input */}
+          <div style={{ marginBottom: 16 }}>
             <label style={{ display: "block", color: "rgba(255,255,255,0.6)", fontSize: 14, marginBottom: 16 }}>
-              Estimated monthly revenue lost to missed calls
+              Average revenue lost per missed call{" "}
+              <span style={{ color: "rgba(255,255,255,0.35)", fontStyle: "italic" }}>
+                (estimate based on {MISSED_PER_MONTH} missed calls/month)
+              </span>
             </label>
             <div style={{ position: "relative", maxWidth: 280 }}>
               <span style={{ position: "absolute", left: 18, top: "50%", transform: "translateY(-50%)", color: COLORS.gold, fontSize: 26, fontWeight: 700, pointerEvents: "none" }}>$</span>
               <input
                 type="text"
                 inputMode="numeric"
-                value={inputText}
-                onChange={e => handleInput(e.target.value)}
+                value={callValueInput}
+                onChange={e => handleCallValue(e.target.value)}
                 placeholder="150"
                 style={{
                   width: "100%",
@@ -274,29 +270,32 @@ function RevenueCalculator() {
                 }}
               />
             </div>
+            <p style={{ color: "rgba(255,255,255,0.3)", fontSize: 12, marginTop: 10 }}>
+              Monthly loss: {MISSED_PER_MONTH} calls × ${callValue || 0} = <strong style={{ color: COLORS.gold }}>${monthlyLost.toLocaleString()}/mo</strong>
+            </p>
           </div>
 
-          {/* Slider */}
-          <div style={{ marginBottom: 48 }}>
+          {/* Months slider */}
+          <div style={{ marginBottom: 48, marginTop: 32 }}>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: 12 }}>
+              <label style={{ color: "rgba(255,255,255,0.6)", fontSize: 14 }}>Over how many months?</label>
+              <span style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 36, fontWeight: 700, color: COLORS.gold }}>
+                {months} <span style={{ fontSize: 16, fontWeight: 400, opacity: 0.6 }}>mo</span>
+              </span>
+            </div>
             <input
               type="range"
-              min={SLIDER_MIN}
-              max={SLIDER_MAX}
-              step={50}
-              value={sliderVal}
-              onChange={e => handleSlider(Number(e.target.value))}
+              min={MONTHS_MIN}
+              max={MONTHS_MAX}
+              step={1}
+              value={months}
+              onChange={e => setMonths(Number(e.target.value))}
               style={{ width: "100%", accentColor: COLORS.gold, cursor: "pointer", height: 6 }}
             />
             <div style={{ display: "flex", justifyContent: "space-between", marginTop: 6 }}>
-              <span style={{ color: "rgba(255,255,255,0.25)", fontSize: 12 }}>${SLIDER_MIN}/mo</span>
-              <span style={{ color: COLORS.gold, fontSize: 12, fontWeight: 600 }}>
-                ${sliderVal.toLocaleString()}/mo
-              </span>
-              <span style={{ color: "rgba(255,255,255,0.25)", fontSize: 12 }}>${(SLIDER_MAX / 1000).toFixed(0)}k/mo</span>
+              <span style={{ color: "rgba(255,255,255,0.25)", fontSize: 12 }}>1 month</span>
+              <span style={{ color: "rgba(255,255,255,0.25)", fontSize: 12 }}>3 years</span>
             </div>
-            <p style={{ color: "rgba(255,255,255,0.25)", fontSize: 12, marginTop: 8 }}>
-              Slider range: ${SLIDER_MIN}–${SLIDER_MAX.toLocaleString()}/mo. Type any amount above for larger numbers.
-            </p>
           </div>
 
           {/* Results */}
@@ -304,11 +303,11 @@ function RevenueCalculator() {
             <div style={{ background: "rgba(201,160,48,0.08)", border: `1px solid rgba(201,160,48,0.2)`, borderRadius: 14, padding: "28px 24px", textAlign: "center" }}>
               <div style={{ color: "rgba(255,255,255,0.45)", fontSize: 12, fontWeight: 600, letterSpacing: "0.1em", textTransform: "uppercase", marginBottom: 10 }}>Lost per Month</div>
               <div style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 52, fontWeight: 700, color: COLORS.gold, lineHeight: 1 }}>{fmt(monthlyLost)}</div>
-              <div style={{ color: "rgba(255,255,255,0.3)", fontSize: 12, marginTop: 8 }}>in missed revenue</div>
+              <div style={{ color: "rgba(255,255,255,0.3)", fontSize: 12, marginTop: 8 }}>{MISSED_PER_MONTH} missed calls × ${callValue || 0}</div>
             </div>
             <div style={{ background: "rgba(0,150,199,0.08)", border: `1px solid rgba(0,150,199,0.2)`, borderRadius: 14, padding: "28px 24px", textAlign: "center" }}>
-              <div style={{ color: "rgba(255,255,255,0.45)", fontSize: 12, fontWeight: 600, letterSpacing: "0.1em", textTransform: "uppercase", marginBottom: 10 }}>Lost per Year</div>
-              <div style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 52, fontWeight: 700, color: COLORS.blue, lineHeight: 1 }}>{fmt(annualLost)}</div>
+              <div style={{ color: "rgba(255,255,255,0.45)", fontSize: 12, fontWeight: 600, letterSpacing: "0.1em", textTransform: "uppercase", marginBottom: 10 }}>Lost over {months} Month{months !== 1 ? "s" : ""}</div>
+              <div style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 52, fontWeight: 700, color: COLORS.blue, lineHeight: 1 }}>{fmt(totalLost)}</div>
               <div style={{ color: "rgba(255,255,255,0.3)", fontSize: 12, marginTop: 8 }}>walking out the door</div>
             </div>
           </div>
@@ -399,18 +398,18 @@ function Industries() {
 function Pricing() {
   const tiers = [
     {
-      name: "Starter", price: "$297", desc: "Everything you need to get online and capture leads.",
-      features: ["Custom Professional Website", "Automated Booking System", "Lead Management CRM", "Email follow-up sequences", "Mobile responsive design"],
+      name: "Starter", price: "$297", desc: "Aria answers every call, captures leads, and fills your calendar — 24/7.",
+      features: ["AI Voice Receptionist (Aria) 24/7", "Bilingual English & Spanish", "Lead capture from every call", "Monthly leads report", "Automated Booking System", "Lead Management CRM", "Email follow-up sequences"],
       cta: "Book My Free Demo", highlight: false,
     },
     {
-      name: "Growth", price: "$497", desc: "Add Aria — your 24/7 AI voice receptionist.",
-      features: ["Everything in Starter", "AI Voice Receptionist (Aria)", "24/7 call answering", "Live call summaries to your phone", "Appointment booking via phone", "Lead capture from every call"],
+      name: "Growth", price: "$497", desc: "Everything in Starter, plus a custom website to complete your digital presence.",
+      features: ["Everything in Starter", "Custom Professional Website", "Live call summaries to your phone", "Appointment booking via phone", "Mobile responsive design", "Priority support"],
       cta: "Most Popular — Book My Free Demo", highlight: true,
     },
     {
       name: "Done-For-You", price: "$997", desc: "Full-service setup, onboarding, and monthly reporting.",
-      features: ["Everything in Growth", "White-glove onboarding", "Custom Aria training & scripting", "Monthly performance reports", "Priority support", "Quarterly strategy calls"],
+      features: ["Everything in Growth", "White-glove onboarding", "Custom Aria training & scripting", "Monthly performance reports", "Quarterly strategy calls", "Dedicated account manager"],
       cta: "Let's Talk", highlight: false,
     },
   ];
