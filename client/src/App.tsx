@@ -207,17 +207,30 @@ function Problem() {
 }
 
 function RevenueCalculator() {
-  const [monthlyInput, setMonthlyInput] = useState("150");
+  const SLIDER_MIN = 50;
+  const SLIDER_MAX = 3000;
+  const [monthlyLost, setMonthlyLost] = useState(150);
+  const [inputText, setInputText] = useState("150");
 
-  const monthlyLost = Math.max(0, parseInt(monthlyInput.replace(/\D/g, ""), 10) || 0);
   const annualLost = monthlyLost * 12;
 
   const fmt = (n: number) =>
     n >= 1000 ? `$${(n / 1000).toFixed(1)}k` : `$${n}`;
 
-  const handleInput = (val: string) => {
-    setMonthlyInput(val.replace(/\D/g, ""));
+  const handleSlider = (val: number) => {
+    setMonthlyLost(val);
+    setInputText(String(val));
   };
+
+  const handleInput = (val: string) => {
+    const digits = val.replace(/\D/g, "");
+    setInputText(digits);
+    const num = parseInt(digits, 10) || 0;
+    setMonthlyLost(num);
+  };
+
+  const sliderVal = Math.min(Math.max(monthlyLost, SLIDER_MIN), SLIDER_MAX);
+  const sliderPct = ((sliderVal - SLIDER_MIN) / (SLIDER_MAX - SLIDER_MIN)) * 100;
 
   return (
     <section className="section" style={{ background: `linear-gradient(160deg, #0d0d1a 0%, #0a1628 100%)` }}>
@@ -228,41 +241,61 @@ function RevenueCalculator() {
             How Much Is This Costing You?
           </h2>
           <p style={{ color: "rgba(255,255,255,0.5)", fontSize: 16, maxWidth: 540, margin: "0 auto" }}>
-            Enter your estimated monthly revenue lost to missed calls. We'll show you the annual cost.
+            Drag the slider or type your own number. See exactly what missed calls are costing you.
           </p>
         </div>
 
         <div style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.08)", borderRadius: 20, padding: "48px 40px" }}>
 
-          {/* Monthly loss input */}
-          <div style={{ marginBottom: 48 }}>
+          {/* Label + input in one row */}
+          <div style={{ marginBottom: 28 }}>
             <label style={{ display: "block", color: "rgba(255,255,255,0.6)", fontSize: 14, marginBottom: 16 }}>
-              How much revenue do you estimate you lose each month to missed calls?
+              Estimated monthly revenue lost to missed calls
             </label>
-            <div style={{ position: "relative", maxWidth: 300 }}>
+            <div style={{ position: "relative", maxWidth: 280 }}>
               <span style={{ position: "absolute", left: 18, top: "50%", transform: "translateY(-50%)", color: COLORS.gold, fontSize: 26, fontWeight: 700, pointerEvents: "none" }}>$</span>
               <input
                 type="text"
                 inputMode="numeric"
-                value={monthlyInput}
+                value={inputText}
                 onChange={e => handleInput(e.target.value)}
                 placeholder="150"
                 style={{
                   width: "100%",
-                  padding: "16px 18px 16px 42px",
+                  padding: "14px 18px 14px 40px",
                   borderRadius: 8,
                   border: `1px solid rgba(201,160,48,0.5)`,
                   background: "rgba(255,255,255,0.07)",
                   color: COLORS.white,
                   fontFamily: "'Cormorant Garamond', serif",
-                  fontSize: 36,
+                  fontSize: 34,
                   fontWeight: 700,
                   outline: "none",
                 }}
               />
             </div>
-            <p style={{ color: "rgba(255,255,255,0.25)", fontSize: 12, marginTop: 10 }}>
-              Even $150/month adds up fast. Type any amount to see the real picture.
+          </div>
+
+          {/* Slider */}
+          <div style={{ marginBottom: 48 }}>
+            <input
+              type="range"
+              min={SLIDER_MIN}
+              max={SLIDER_MAX}
+              step={50}
+              value={sliderVal}
+              onChange={e => handleSlider(Number(e.target.value))}
+              style={{ width: "100%", accentColor: COLORS.gold, cursor: "pointer", height: 6 }}
+            />
+            <div style={{ display: "flex", justifyContent: "space-between", marginTop: 6 }}>
+              <span style={{ color: "rgba(255,255,255,0.25)", fontSize: 12 }}>${SLIDER_MIN}/mo</span>
+              <span style={{ color: COLORS.gold, fontSize: 12, fontWeight: 600 }}>
+                ${sliderVal.toLocaleString()}/mo
+              </span>
+              <span style={{ color: "rgba(255,255,255,0.25)", fontSize: 12 }}>${(SLIDER_MAX / 1000).toFixed(0)}k/mo</span>
+            </div>
+            <p style={{ color: "rgba(255,255,255,0.25)", fontSize: 12, marginTop: 8 }}>
+              Slider range: ${SLIDER_MIN}–${SLIDER_MAX.toLocaleString()}/mo. Type any amount above for larger numbers.
             </p>
           </div>
 
