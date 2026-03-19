@@ -206,6 +206,84 @@ function Problem() {
   );
 }
 
+function RevenueCalculator() {
+  const [missedCalls, setMissedCalls] = useState(7);
+  const avgJobValue = 350;
+  const conversionRate = 0.68;
+  const monthlyLost = Math.round(missedCalls * 4.3 * avgJobValue * conversionRate);
+  const annualLost = monthlyLost * 12;
+
+  const fmt = (n: number) =>
+    n >= 1000 ? `$${(n / 1000).toFixed(1)}k` : `$${n}`;
+
+  return (
+    <section className="section" style={{ background: `linear-gradient(160deg, #0d0d1a 0%, #0a1628 100%)` }}>
+      <div className="container" style={{ maxWidth: 780 }}>
+        <div style={{ textAlign: "center", marginBottom: 56 }}>
+          <div className="tag" style={{ background: "rgba(201,160,48,0.15)", color: COLORS.gold }}>Revenue Calculator</div>
+          <h2 style={{ fontSize: "clamp(28px,4vw,48px)", fontWeight: 700, color: COLORS.white, marginBottom: 16 }}>
+            How Much Is This Costing You?
+          </h2>
+          <p style={{ color: "rgba(255,255,255,0.5)", fontSize: 16, maxWidth: 520, margin: "0 auto" }}>
+            Drag the slider to match your business. See the real cost of every unanswered call.
+          </p>
+        </div>
+
+        {/* Slider */}
+        <div style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.08)", borderRadius: 20, padding: "48px 40px" }}>
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: 12 }}>
+            <span style={{ color: "rgba(255,255,255,0.6)", fontSize: 14 }}>Missed calls per week</span>
+            <span style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 42, fontWeight: 700, color: COLORS.gold }}>{missedCalls}</span>
+          </div>
+
+          <input
+            type="range"
+            min={1}
+            max={50}
+            value={missedCalls}
+            onChange={e => setMissedCalls(Number(e.target.value))}
+            style={{ width: "100%", accentColor: COLORS.gold, cursor: "pointer", height: 6, marginBottom: 8 }}
+          />
+          <div style={{ display: "flex", justifyContent: "space-between" }}>
+            <span style={{ color: "rgba(255,255,255,0.25)", fontSize: 12 }}>1 call/week</span>
+            <span style={{ color: "rgba(255,255,255,0.25)", fontSize: 12 }}>50 calls/week</span>
+          </div>
+
+          {/* Results */}
+          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 20, marginTop: 40 }}>
+            <div style={{ background: "rgba(201,160,48,0.08)", border: `1px solid rgba(201,160,48,0.2)`, borderRadius: 14, padding: "28px 24px", textAlign: "center" }}>
+              <div style={{ color: "rgba(255,255,255,0.45)", fontSize: 12, fontWeight: 600, letterSpacing: "0.1em", textTransform: "uppercase", marginBottom: 10 }}>Lost per Month</div>
+              <div style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 52, fontWeight: 700, color: COLORS.gold, lineHeight: 1 }}>{fmt(monthlyLost)}</div>
+              <div style={{ color: "rgba(255,255,255,0.3)", fontSize: 12, marginTop: 8 }}>in missed revenue</div>
+            </div>
+            <div style={{ background: "rgba(0,150,199,0.08)", border: `1px solid rgba(0,150,199,0.2)`, borderRadius: 14, padding: "28px 24px", textAlign: "center" }}>
+              <div style={{ color: "rgba(255,255,255,0.45)", fontSize: 12, fontWeight: 600, letterSpacing: "0.1em", textTransform: "uppercase", marginBottom: 10 }}>Lost per Year</div>
+              <div style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 52, fontWeight: 700, color: COLORS.blue, lineHeight: 1 }}>{fmt(annualLost)}</div>
+              <div style={{ color: "rgba(255,255,255,0.3)", fontSize: 12, marginTop: 8 }}>walking out the door</div>
+            </div>
+          </div>
+
+          <div style={{ marginTop: 32, padding: "16px 20px", background: "rgba(255,255,255,0.03)", borderRadius: 10, display: "flex", gap: 12, alignItems: "flex-start" }}>
+            <span style={{ color: COLORS.gold, fontSize: 16, flexShrink: 0, marginTop: 2 }}>ℹ</span>
+            <p style={{ color: "rgba(255,255,255,0.35)", fontSize: 12, lineHeight: 1.7, margin: 0 }}>
+              Based on an average job value of ${avgJobValue} and a 68% caller conversion rate for home service businesses. Your actual numbers may vary.
+            </p>
+          </div>
+
+          <div style={{ textAlign: "center", marginTop: 36 }}>
+            <p style={{ color: "rgba(255,255,255,0.4)", fontSize: 14, marginBottom: 20 }}>
+              Aria costs a fraction of that. Stop the leak today.
+            </p>
+            <a href="#trial">
+              <button className="cta-primary" style={{ fontSize: 16, padding: "16px 40px" }}>Book My Free Demo →</button>
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
 function HowItWorks() {
   const steps = [
     { n: "01", title: "We Set Up Aria", desc: "We train your AI receptionist on your business — your services, pricing, schedule, and FAQs. Ready in under 24 hours." },
@@ -616,6 +694,7 @@ export default function App() {
       <Nav />
       <Hero />
       <Problem />
+      <RevenueCalculator />
       <HowItWorks />
       <Industries />
       <Pricing />
