@@ -103,6 +103,9 @@ function Nav() {
           {["Services", "Pricing", "Demo"].map(l => (
             <a key={l} href={`#${l.toLowerCase()}`} style={{ color: scrolled ? COLORS.grayText : "rgba(255,255,255,0.85)", textDecoration: "none", fontSize: 14, fontWeight: 500, transition: "color 0.2s" }}>{l}</a>
           ))}
+          <a href="tel:+12107917775" style={{ color: "#B89A3E", textDecoration: "none", fontSize: 14, fontWeight: 600, letterSpacing: "0.02em", whiteSpace: "nowrap" }}>
+            📞 (210) 791-7775
+          </a>
           <a href="#trial">
             <button className="cta-primary" style={{ padding: "10px 22px", fontSize: 14 }}>Start Free Trial</button>
           </a>
@@ -153,7 +156,12 @@ function Hero() {
             <a href="#trial"><button className="cta-primary" style={{ fontSize: 17, padding: "18px 42px" }}>Start 3-Day Free Trial</button></a>
             <a href="#demo"><button className="cta-outline" style={{ fontSize: 17, padding: "16px 40px" }}>Hear Aria Live</button></a>
           </div>
-          <p style={{ color: "rgba(255,255,255,0.35)", fontSize: 13, marginTop: 16 }}>No credit card required. No long-term contracts.</p>
+          <div style={{ display: "flex", alignItems: "center", gap: 24, marginTop: 20, flexWrap: "wrap" }}>
+            <p style={{ color: "rgba(255,255,255,0.35)", fontSize: 13 }}>No credit card required. No long-term contracts.</p>
+            <a href="tel:+12107917775" style={{ display: "flex", alignItems: "center", gap: 8, color: "#B89A3E", textDecoration: "none", fontSize: 15, fontWeight: 600, letterSpacing: "0.01em", whiteSpace: "nowrap" }}>
+              <span style={{ fontSize: 16 }}>📞</span> Call us: (210) 791-7775
+            </a>
+          </div>
         </div>
 
         <div style={{ display: "flex", gap: 48, marginTop: 80, paddingTop: 48, borderTop: "1px solid rgba(255,255,255,0.08)", flexWrap: "wrap" }}>
