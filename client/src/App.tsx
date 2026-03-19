@@ -107,7 +107,7 @@ function Nav() {
             📞 (210) 791-7775
           </a>
           <a href="#trial">
-            <button className="cta-primary" style={{ padding: "10px 22px", fontSize: 14 }}>Start Free Trial</button>
+            <button className="cta-primary" style={{ padding: "10px 22px", fontSize: 14 }}>Book My Free Demo</button>
           </a>
         </div>
       </div>
@@ -133,7 +133,7 @@ function Hero() {
       <div className="container" style={{ paddingTop: 100 }}>
         <div className="fade-up" style={{ maxWidth: 680 }}>
           <div className="tag" style={{ background: "rgba(201,160,48,0.15)", color: COLORS.gold }}>
-            AI Voice Receptionist
+            Meet Aria — AI Voice Receptionist
           </div>
           <h1 style={{
             fontSize: "clamp(42px, 6vw, 76px)",
@@ -150,14 +150,14 @@ function Hero() {
             }}>Another Customer.</span>
           </h1>
           <p style={{ color: "rgba(255,255,255,0.7)", fontSize: 19, lineHeight: 1.7, marginBottom: 40, fontWeight: 300 }}>
-            Your AI receptionist answers every call, books appointments, and captures leads — 24 hours a day, 7 days a week. Built for small businesses ready to grow without the overhead.
+            Aria, your AI receptionist, answers every call, books appointments, and captures leads — 24 hours a day, 7 days a week. Built for small businesses ready to grow without the overhead.
           </p>
           <div style={{ display: "flex", gap: 16, flexWrap: "wrap" }}>
-            <a href="#trial"><button className="cta-primary" style={{ fontSize: 17, padding: "18px 42px" }}>Start 3-Day Free Trial</button></a>
+            <a href="#trial"><button className="cta-primary" style={{ fontSize: 17, padding: "18px 42px" }}>Book My Free Demo →</button></a>
             <a href="#demo"><button className="cta-outline" style={{ fontSize: 17, padding: "16px 40px" }}>Hear Aria Live</button></a>
           </div>
           <div style={{ display: "flex", alignItems: "center", gap: 24, marginTop: 20, flexWrap: "wrap" }}>
-            <p style={{ color: "rgba(255,255,255,0.35)", fontSize: 13 }}>No credit card required. No long-term contracts.</p>
+            <p style={{ color: "rgba(255,255,255,0.35)", fontSize: 13 }}>Hear Aria answer for your business before you spend a single dollar.</p>
             <a href="tel:+12107917775" style={{ display: "flex", alignItems: "center", gap: 8, color: "#B89A3E", textDecoration: "none", fontSize: 15, fontWeight: 600, letterSpacing: "0.01em", whiteSpace: "nowrap" }}>
               <span style={{ fontSize: 16 }}>📞</span> Call us: (210) 791-7775
             </a>
@@ -165,7 +165,7 @@ function Hero() {
         </div>
 
         <div style={{ display: "flex", gap: 48, marginTop: 80, paddingTop: 48, borderTop: "1px solid rgba(255,255,255,0.08)", flexWrap: "wrap" }}>
-          {[["24/7", "Always answering"], ["3-Day", "Free trial"], ["< 60s", "Setup time"], ["$0", "Missed calls cost"]].map(([n, l]) => (
+          {[["24/7", "Always answering"], ["Free", "Demo available"], ["< 60s", "Setup time"], ["$0", "Missed calls cost"]].map(([n, l]) => (
             <div key={n}>
               <div style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 38, fontWeight: 700, color: COLORS.gold }}>{n}</div>
               <div style={{ color: "rgba(255,255,255,0.5)", fontSize: 13, marginTop: 4 }}>{l}</div>
@@ -280,12 +280,12 @@ function Pricing() {
     {
       name: "Starter", price: "$297", desc: "Everything you need to get online and capture leads.",
       features: ["Custom Professional Website", "Automated Booking System", "Lead Management CRM", "Email follow-up sequences", "Mobile responsive design"],
-      cta: "Start Free Trial", highlight: false,
+      cta: "Book My Free Demo", highlight: false,
     },
     {
       name: "Growth", price: "$497", desc: "Add Aria — your 24/7 AI voice receptionist.",
       features: ["Everything in Starter", "AI Voice Receptionist (Aria)", "24/7 call answering", "Live call summaries to your phone", "Appointment booking via phone", "Lead capture from every call"],
-      cta: "Most Popular — Start Free Trial", highlight: true,
+      cta: "Most Popular — Book My Free Demo", highlight: true,
     },
     {
       name: "Done-For-You", price: "$997", desc: "Full-service setup, onboarding, and monthly reporting.",
@@ -530,30 +530,64 @@ function LeadCapture() {
   return (
     <section className="section" id="trial" style={{ background: COLORS.black }}>
       <div className="container" style={{ maxWidth: 640, textAlign: "center" }}>
-        <div className="tag" style={{ background: "rgba(201,160,48,0.15)", color: COLORS.gold }}>Get Started</div>
-        <h2 style={{ fontSize: "clamp(30px,4vw,50px)", fontWeight: 700, color: COLORS.white, marginBottom: 12 }}>
-          Start Your 3-Day Free Trial
+        <div className="tag" style={{ background: "rgba(201,160,48,0.15)", color: COLORS.gold }}>No Risk. No Pressure.</div>
+        <h2 style={{ fontSize: "clamp(30px,4vw,48px)", fontWeight: 700, color: COLORS.white, marginBottom: 16, lineHeight: 1.2 }}>
+          Book a Free Demo —<br />
+          <span style={{ color: COLORS.gold }}>Hear Aria Answer for YOUR Business</span>
         </h2>
-        <p style={{ color: "rgba(255,255,255,0.5)", fontSize: 16, marginBottom: 40 }}>No credit card. No commitment. Just results.</p>
+        <p style={{ color: "rgba(255,255,255,0.55)", fontSize: 16, marginBottom: 40, lineHeight: 1.7 }}>
+          Before you spend a single dollar, hear exactly how Aria would greet your customers, handle your most common questions, and book your appointments — customized to your business.
+        </p>
         {!submitted ? (
           <div style={{ display: "flex", flexDirection: "column", gap: 14, textAlign: "left" }}>
-            {[["name", "Your Name", "text"], ["business", "Business Name", "text"], ["phone", "Phone Number", "tel"], ["email", "Email Address", "email"]].map(([key, ph, type]) => (
+            {[["name", "Your Name", "text"], ["business", "Business Name", "text"], ["phone", "Your Phone Number", "tel"], ["email", "Email Address", "email"]].map(([key, ph, type]) => (
               <input key={key} type={type} placeholder={ph} value={form[key as keyof typeof form]} onChange={e => setForm({ ...form, [key]: e.target.value })}
                 style={{ padding: "14px 18px", borderRadius: 6, border: "1px solid rgba(255,255,255,0.15)", background: "rgba(255,255,255,0.06)", color: COLORS.white, fontFamily: "'DM Sans', sans-serif", fontSize: 15, outline: "none" }}
               />
             ))}
             <button className="cta-primary" onClick={handleSubmit} disabled={loading} style={{ marginTop: 8, padding: "18px", fontSize: 17, opacity: loading ? 0.7 : 1 }}>
-              {loading ? "Sending..." : "Claim My Free Trial →"}
+              {loading ? "Sending..." : "Book My Free Demo →"}
             </button>
             <p style={{ color: "rgba(255,255,255,0.25)", fontSize: 12, textAlign: "center" }}>By submitting, you agree to be contacted by RHL Digital. We respect your privacy.</p>
           </div>
         ) : (
           <div style={{ padding: "48px", background: "rgba(201,160,48,0.1)", borderRadius: 16, border: `1px solid ${COLORS.gold}` }}>
             <div style={{ fontSize: 48, marginBottom: 16 }}>🙌</div>
-            <h3 style={{ color: COLORS.gold, fontFamily: "'Cormorant Garamond', serif", fontSize: 32, marginBottom: 8 }}>You're In!</h3>
-            <p style={{ color: "rgba(255,255,255,0.7)", fontSize: 16 }}>We'll be in touch within 24 hours to get Aria set up for your business.</p>
+            <h3 style={{ color: COLORS.gold, fontFamily: "'Cormorant Garamond', serif", fontSize: 32, marginBottom: 8 }}>Demo Booked!</h3>
+            <p style={{ color: "rgba(255,255,255,0.7)", fontSize: 16 }}>We'll be in touch within 24 hours to set up your personalized Aria demo.</p>
           </div>
         )}
+      </div>
+    </section>
+  );
+}
+
+function SocialProof() {
+  return (
+    <section className="section" style={{ background: COLORS.gray }}>
+      <div className="container" style={{ textAlign: "center", maxWidth: 720 }}>
+        <div className="tag">San Antonio, TX</div>
+        <h2 style={{ fontSize: "clamp(28px,4vw,48px)", fontWeight: 700, marginBottom: 24, lineHeight: 1.25 }}>
+          Be One of Our First San Antonio Clients
+        </h2>
+        <p style={{ color: COLORS.grayText, fontSize: 18, lineHeight: 1.8, marginBottom: 48, maxWidth: 580, margin: "0 auto 48px" }}>
+          Help shape the future of AI for local business. As a founding client, you'll get our personal attention, direct line to James, and pricing that won't last forever.
+        </p>
+        <div style={{ display: "flex", justifyContent: "center", gap: 32, flexWrap: "wrap", marginBottom: 48 }}>
+          {[
+            { icon: "🤝", text: "White-glove onboarding from James personally" },
+            { icon: "🔒", text: "Founding client pricing locked in for life" },
+            { icon: "🏙️", text: "Proudly serving San Antonio small businesses" },
+          ].map(({ icon, text }) => (
+            <div key={text} style={{ display: "flex", alignItems: "center", gap: 12, maxWidth: 220, textAlign: "left" }}>
+              <span style={{ fontSize: 24, flexShrink: 0 }}>{icon}</span>
+              <span style={{ color: COLORS.grayText, fontSize: 14, lineHeight: 1.5 }}>{text}</span>
+            </div>
+          ))}
+        </div>
+        <a href="#trial">
+          <button className="cta-primary" style={{ fontSize: 17, padding: "18px 48px" }}>Claim Your Spot →</button>
+        </a>
       </div>
     </section>
   );
@@ -586,6 +620,7 @@ export default function App() {
       <Industries />
       <Pricing />
       <DemoSection />
+      <SocialProof />
       <LeadCapture />
       <Footer />
     </>
