@@ -207,20 +207,16 @@ function Problem() {
 }
 
 function RevenueCalculator() {
-  const [missedCalls, setMissedCalls] = useState(7);
-  const [jobValueInput, setJobValueInput] = useState("150");
-  const conversionRate = 0.68;
+  const [monthlyInput, setMonthlyInput] = useState("150");
 
-  const avgJobValue = Math.max(1, parseInt(jobValueInput.replace(/\D/g, ""), 10) || 0);
-  const monthlyLost = Math.round(missedCalls * 4.3 * avgJobValue * conversionRate);
+  const monthlyLost = Math.max(0, parseInt(monthlyInput.replace(/\D/g, ""), 10) || 0);
   const annualLost = monthlyLost * 12;
 
   const fmt = (n: number) =>
     n >= 1000 ? `$${(n / 1000).toFixed(1)}k` : `$${n}`;
 
-  const handleJobValue = (val: string) => {
-    const digits = val.replace(/\D/g, "");
-    setJobValueInput(digits);
+  const handleInput = (val: string) => {
+    setMonthlyInput(val.replace(/\D/g, ""));
   };
 
   return (
@@ -231,63 +227,43 @@ function RevenueCalculator() {
           <h2 style={{ fontSize: "clamp(28px,4vw,48px)", fontWeight: 700, color: COLORS.white, marginBottom: 16 }}>
             How Much Is This Costing You?
           </h2>
-          <p style={{ color: "rgba(255,255,255,0.5)", fontSize: 16, maxWidth: 520, margin: "0 auto" }}>
-            Enter your numbers below and see the real cost of every unanswered call.
+          <p style={{ color: "rgba(255,255,255,0.5)", fontSize: 16, maxWidth: 540, margin: "0 auto" }}>
+            Enter your estimated monthly revenue lost to missed calls. We'll show you the annual cost.
           </p>
         </div>
 
         <div style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.08)", borderRadius: 20, padding: "48px 40px" }}>
 
-          {/* Job value input */}
-          <div style={{ marginBottom: 40 }}>
-            <label style={{ display: "block", color: "rgba(255,255,255,0.6)", fontSize: 14, marginBottom: 12 }}>
-              Average value of a new job or customer ($)
+          {/* Monthly loss input */}
+          <div style={{ marginBottom: 48 }}>
+            <label style={{ display: "block", color: "rgba(255,255,255,0.6)", fontSize: 14, marginBottom: 16 }}>
+              How much revenue do you estimate you lose each month to missed calls?
             </label>
-            <div style={{ position: "relative", maxWidth: 260 }}>
-              <span style={{ position: "absolute", left: 16, top: "50%", transform: "translateY(-50%)", color: COLORS.gold, fontSize: 20, fontWeight: 700, pointerEvents: "none" }}>$</span>
+            <div style={{ position: "relative", maxWidth: 300 }}>
+              <span style={{ position: "absolute", left: 18, top: "50%", transform: "translateY(-50%)", color: COLORS.gold, fontSize: 26, fontWeight: 700, pointerEvents: "none" }}>$</span>
               <input
                 type="text"
                 inputMode="numeric"
-                value={jobValueInput}
-                onChange={e => handleJobValue(e.target.value)}
+                value={monthlyInput}
+                onChange={e => handleInput(e.target.value)}
                 placeholder="150"
                 style={{
                   width: "100%",
-                  padding: "14px 18px 14px 36px",
+                  padding: "16px 18px 16px 42px",
                   borderRadius: 8,
-                  border: `1px solid rgba(201,160,48,0.4)`,
-                  background: "rgba(255,255,255,0.06)",
+                  border: `1px solid rgba(201,160,48,0.5)`,
+                  background: "rgba(255,255,255,0.07)",
                   color: COLORS.white,
                   fontFamily: "'Cormorant Garamond', serif",
-                  fontSize: 28,
+                  fontSize: 36,
                   fontWeight: 700,
                   outline: "none",
                 }}
               />
             </div>
-            <p style={{ color: "rgba(255,255,255,0.25)", fontSize: 12, marginTop: 8 }}>
-              e.g. $150 for a cleaning job, $400 for HVAC, $800 for a dental visit
+            <p style={{ color: "rgba(255,255,255,0.25)", fontSize: 12, marginTop: 10 }}>
+              Even $150/month adds up fast. Type any amount to see the real picture.
             </p>
-          </div>
-
-          {/* Missed calls slider */}
-          <div style={{ marginBottom: 40 }}>
-            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: 12 }}>
-              <label style={{ color: "rgba(255,255,255,0.6)", fontSize: 14 }}>Missed calls per week</label>
-              <span style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 42, fontWeight: 700, color: COLORS.gold }}>{missedCalls}</span>
-            </div>
-            <input
-              type="range"
-              min={1}
-              max={50}
-              value={missedCalls}
-              onChange={e => setMissedCalls(Number(e.target.value))}
-              style={{ width: "100%", accentColor: COLORS.gold, cursor: "pointer", height: 6, marginBottom: 8 }}
-            />
-            <div style={{ display: "flex", justifyContent: "space-between" }}>
-              <span style={{ color: "rgba(255,255,255,0.25)", fontSize: 12 }}>1 / week</span>
-              <span style={{ color: "rgba(255,255,255,0.25)", fontSize: 12 }}>50 / week</span>
-            </div>
           </div>
 
           {/* Results */}
@@ -304,14 +280,7 @@ function RevenueCalculator() {
             </div>
           </div>
 
-          <div style={{ marginTop: 28, padding: "14px 18px", background: "rgba(255,255,255,0.03)", borderRadius: 10, display: "flex", gap: 10, alignItems: "flex-start" }}>
-            <span style={{ color: COLORS.gold, fontSize: 15, flexShrink: 0, marginTop: 1 }}>ℹ</span>
-            <p style={{ color: "rgba(255,255,255,0.3)", fontSize: 12, lineHeight: 1.7, margin: 0 }}>
-              Based on a 68% caller conversion rate for local service businesses. Your actual numbers may vary.
-            </p>
-          </div>
-
-          <div style={{ textAlign: "center", marginTop: 36 }}>
+          <div style={{ textAlign: "center", marginTop: 40 }}>
             <p style={{ color: "rgba(255,255,255,0.4)", fontSize: 14, marginBottom: 20 }}>
               Aria costs a fraction of that. Stop the leak today.
             </p>
