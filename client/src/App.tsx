@@ -730,9 +730,15 @@ function Footer() {
   );
 }
 
+/* ── Scroll to top on every route change ── */
+function ScrollToTop() {
+  const [location] = useLocation();
+  useEffect(() => { window.scrollTo(0, 0); }, [location]);
+  return null;
+}
+
 /* ── Shared legal page wrapper ── */
 function LegalPage({ title, children }: { title: string; children: React.ReactNode }) {
-  useEffect(() => { window.scrollTo(0, 0); }, []);
   return (
     <>
       <Nav />
@@ -1017,6 +1023,7 @@ export default function App() {
   return (
     <>
       <style>{globalStyle}</style>
+      <ScrollToTop />
       <Switch>
         <Route path="/privacy-policy" component={PrivacyPolicy} />
         <Route path="/terms" component={TermsPage} />
