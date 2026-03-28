@@ -478,7 +478,11 @@ function DemoSection() {
   const [conversationId, setConversationId] = useState<number | null>(null);
   const bottomRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => { bottomRef.current?.scrollIntoView({ behavior: "smooth" }); }, [messages]);
+  useEffect(() => {
+    if (messages.length > 1) {
+      bottomRef.current?.scrollIntoView({ behavior: "smooth" });
+    }
+  }, [messages]);
 
   const send = async () => {
     if (!input.trim() || loading) return;
@@ -733,7 +737,12 @@ function Footer() {
 /* ── Scroll to top on every route change ── */
 function ScrollToTop() {
   const [location] = useLocation();
-  useEffect(() => { window.scrollTo(0, 0); }, [location]);
+  useEffect(() => {
+    if ("scrollRestoration" in history) {
+      history.scrollRestoration = "manual";
+    }
+    window.scrollTo({ top: 0, left: 0, behavior: "instant" });
+  }, [location]);
   return null;
 }
 
