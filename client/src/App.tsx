@@ -86,7 +86,7 @@ function Nav() {
     }}>
       <div style={{ maxWidth: 1080, margin: "0 auto", display: "flex", alignItems: "center", justifyContent: "space-between", height: 68 }}>
         <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-          <img src="/rhl-logo.png" alt="RHL Digital" style={{ height: 44, width: 44, objectFit: "contain", flexShrink: 0 }} />
+          <img src="/rhl-logo-full.webp" alt="RHL Digital" style={{ height: 48, width: 48, objectFit: "contain", flexShrink: 0, borderRadius: 8 }} />
         </div>
         <div style={{ display: "flex", gap: 32, alignItems: "center" }}>
           {["Services", "Pricing", "Demo"].map(l => (
