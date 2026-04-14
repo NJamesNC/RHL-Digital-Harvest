@@ -178,6 +178,66 @@ function Hero() {
   );
 }
 
+function AuditBanner() {
+  return (
+    <section style={{
+      background: `linear-gradient(135deg, #0a1628 0%, #0f1f3a 50%, #0a1628 100%)`,
+      borderTop: `3px solid ${COLORS.gold}`,
+      borderBottom: `1px solid rgba(201,160,48,0.2)`,
+      padding: "56px 24px",
+      textAlign: "center",
+      position: "relative",
+      overflow: "hidden",
+    }}>
+      <div style={{ position: "absolute", top: "50%", left: "50%", transform: "translate(-50%,-50%)", width: 600, height: 300, borderRadius: "50%", background: "radial-gradient(ellipse, rgba(201,160,48,0.07) 0%, transparent 70%)", pointerEvents: "none" }} />
+      <div className="container" style={{ position: "relative" }}>
+        <div style={{
+          display: "inline-flex",
+          alignItems: "center",
+          gap: 8,
+          background: "rgba(201,160,48,0.12)",
+          border: `1px solid rgba(201,160,48,0.3)`,
+          borderRadius: 100,
+          padding: "6px 16px",
+          marginBottom: 20,
+        }}>
+          <span style={{ fontSize: 14 }}>🔍</span>
+          <span style={{ color: COLORS.gold, fontSize: 12, fontWeight: 600, letterSpacing: "0.08em", textTransform: "uppercase" }}>Free AI Visibility + SEO Audit</span>
+        </div>
+        <h2 style={{
+          fontSize: "clamp(26px, 4vw, 48px)",
+          fontWeight: 700,
+          color: COLORS.white,
+          lineHeight: 1.15,
+          marginBottom: 16,
+        }}>
+          Is Your Business Invisible to<br />
+          <span style={{ background: `linear-gradient(90deg, ${COLORS.gold}, ${COLORS.goldLight})`, WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>AI &amp; Google?</span>
+        </h2>
+        <p style={{
+          color: "rgba(255,255,255,0.65)",
+          fontSize: "clamp(15px, 2vw, 18px)",
+          lineHeight: 1.7,
+          maxWidth: 580,
+          margin: "0 auto 32px",
+          fontWeight: 300,
+        }}>
+          ChatGPT, Google, and Yelp now decide who gets recommended. Most local businesses don't show up — find out where you stand in 60 seconds.
+        </p>
+        <a href="/audit" data-testid="link-audit-cta" style={{ textDecoration: "none" }}>
+          <button
+            data-testid="button-audit-cta"
+            className="cta-primary"
+            style={{ fontSize: 17, padding: "18px 42px", borderRadius: 6 }}
+          >
+            Get Your Free AI + SEO Audit →
+          </button>
+        </a>
+      </div>
+    </section>
+  );
+}
+
 function Problem() {
   return (
     <section className="section" style={{ background: COLORS.gray }}>
@@ -1015,6 +1075,7 @@ function HomePage() {
     <>
       <Nav />
       <Hero />
+      <AuditBanner />
       <Problem />
       <RevenueCalculator />
       <HowItWorks />
