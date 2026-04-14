@@ -86,24 +86,13 @@ function Nav() {
     }}>
       <div style={{ maxWidth: 1080, margin: "0 auto", display: "flex", alignItems: "center", justifyContent: "space-between", height: 68 }}>
         <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-          <div style={{
-            width: 44,
-            height: 50,
-            background: "#F0EDE6",
-            clipPath: "polygon(50% 0%, 100% 12%, 100% 62%, 50% 100%, 0% 62%, 0% 12%)",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            flexShrink: 0,
-          }}>
-            <img src="/rhl-logo.png" alt="RHL Digital" style={{ height: 36, width: 36, objectFit: "contain" }} />
-          </div>
-          <span style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 20, fontWeight: 700, color: scrolled ? COLORS.black : COLORS.white }}>RHL Digital</span>
+          <img src="/rhl-logo.png" alt="RHL Digital" style={{ height: 44, width: 44, objectFit: "contain", flexShrink: 0 }} />
         </div>
         <div style={{ display: "flex", gap: 32, alignItems: "center" }}>
           {["Services", "Pricing", "Demo"].map(l => (
             <a key={l} href={`#${l.toLowerCase()}`} style={{ color: scrolled ? COLORS.grayText : "rgba(255,255,255,0.85)", textDecoration: "none", fontSize: 14, fontWeight: 500, transition: "color 0.2s" }}>{l}</a>
           ))}
+          <a href="/audit" style={{ color: scrolled ? COLORS.gold : COLORS.gold, textDecoration: "none", fontSize: 14, fontWeight: 600, transition: "color 0.2s", whiteSpace: "nowrap" }}>Free AI Audit</a>
           <a href="tel:+12107917775" style={{ color: "#B89A3E", textDecoration: "none", fontSize: 14, fontWeight: 600, letterSpacing: "0.02em", whiteSpace: "nowrap" }}>
             📞 (210) 791-7775
           </a>
