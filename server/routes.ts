@@ -1,4 +1,6 @@
 import type { Express } from "express";
+import express from "express";
+import path from "path";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
 import { insertTrialSignupSchema, insertContactSubmissionSchema } from "@shared/schema";
@@ -15,6 +17,13 @@ export async function registerRoutes(
   httpServer: Server,
   app: Express
 ): Promise<Server> {
+
+  const publicDir = path.resolve(process.cwd(), "public");
+  app.use(express.static(publicDir));
+
+  app.get("/audit", (_req, res) => {
+    res.sendFile(path.join(publicDir, "audit.html"));
+  });
 
   app.post("/api/trial-signups", async (req, res) => {
     try {
