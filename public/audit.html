@@ -876,7 +876,6 @@
 
       <!-- SCREEN: DONE -->
       <div class="screen" id="screen-done">
-        <div id="lead-bar"></div>
         <div id="report-output"></div>
         <div class="btn-row" style="margin-top: 16px">
           <button class="btn btn-primary btn-sm" onclick="shareReport()">
@@ -1539,26 +1538,12 @@ Be specific — use real data you found (exact review counts, actual meta title 
         currentMeta.lastScore = score.pct;
         currentMeta.lastGrade = grade;
 
-        // Lead bar
-        const leadBar = document.getElementById("lead-bar");
+        // Show lead action buttons in the bottom row if contact email exists
         if (contactEmail) {
-          leadBar.innerHTML = `<div class="lead-capture-bar">
-      <div>
-        <div class="lead-label">Lead Captured</div>
-        <div class="lead-email-display">📧 ${contactEmail}${contactName ? " — " + contactName : ""}${contactPhone ? " · " + contactPhone : ""}</div>
-        ${notes ? `<div style="font-size:11px;color:var(--muted);margin-top:3px;">📝 ${notes}</div>` : ""}
-      </div>
-      <div style="display:flex;gap:8px;flex-wrap:wrap;">
-        <button class="btn btn-sm" style="background:rgba(78,203,113,.15);color:var(--green);border:1px solid var(--green);" onclick="emailLead()">📧 Email Lead</button>
-        <button class="btn btn-sm" style="background:rgba(91,156,246,.1);color:var(--blue);border:1px solid var(--blue);" onclick="copyLeadEmail()">📋 Copy</button>
-      </div>
-    </div>`;
           document.getElementById("btn-email-lead").style.display =
             "inline-flex";
           document.getElementById("btn-copy-email").style.display =
             "inline-flex";
-        } else {
-          leadBar.innerHTML = "";
         }
 
         // Section score rows
