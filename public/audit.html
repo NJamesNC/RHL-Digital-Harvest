@@ -1444,7 +1444,7 @@ Be specific — use real data you found (exact review counts, actual meta title 
         startProgress(name);
 
         try {
-          const resp = await fetch("https://api.anthropic.com/v1/messages", {
+          const resp = await fetch("/api/claude", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
