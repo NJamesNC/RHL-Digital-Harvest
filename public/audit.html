@@ -1475,9 +1475,8 @@ Be specific — use real data you found (exact review counts, actual meta title 
             );
 
           let jsonStr = raw
-            .replace(/^```json\s*/i, "")
-            .replace(/^```\s*/i, "")
-            .replace(/\s*```$/i, "")
+            .replace(/```json/gi, "")
+            .replace(/```/g, "")
             .trim();
           const s = jsonStr.indexOf("{"),
             e2 = jsonStr.lastIndexOf("}");
