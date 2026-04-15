@@ -85,9 +85,9 @@ function Nav() {
       padding: "0 24px",
     }}>
       <div style={{ maxWidth: 1080, margin: "0 auto", display: "flex", alignItems: "center", justifyContent: "space-between", height: 68 }}>
-        <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+        <a href="/" onClick={() => window.scrollTo({ top: 0 })} style={{ display: "flex", alignItems: "center", gap: 10, textDecoration: "none", cursor: "pointer" }}>
           <img src="/rhl-logo-full.webp" alt="RHL Digital" style={{ height: 48, width: 48, objectFit: "contain", flexShrink: 0, borderRadius: 8 }} />
-        </div>
+        </a>
         <div style={{ display: "flex", gap: 32, alignItems: "center" }}>
           {["Services", "Pricing", "Demo"].map(l => (
             <a key={l} href={`#${l.toLowerCase()}`} style={{ color: scrolled ? COLORS.grayText : "rgba(255,255,255,0.85)", textDecoration: "none", fontSize: 14, fontWeight: 500, transition: "color 0.2s" }}>{l}</a>
