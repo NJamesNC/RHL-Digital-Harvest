@@ -1188,7 +1188,8 @@
       function buildPrompt(name, url, city, industry, keywords) {
         const clean = url.replace(/^https?:\/\//, "").replace(/\/$/, "");
         const full = url.startsWith("http") ? url : "https://" + url;
-        return `You are an expert AI Brand + SEO Auditor for RHL Digital. Research this business thoroughly using web search.
+        return `You are an expert AI Brand and SEO Auditor for RHL Digital. Analyze this business and score all 33 audit checkpoints based on your knowledge of SEO best practices, common patterns for this type of business, and reasonable inferences from the information provided.
+Do NOT say you cannot access websites. Instead make your best professional assessment for each checkpoint — use "warn" when uncertain rather than refusing. You are acting as an expert consultant giving a knowledge-based audit, not a live web crawler.
 
 BUSINESS:
 - Name: ${name}
@@ -1196,20 +1197,6 @@ BUSINESS:
 - City: ${city || "unknown"}
 - Industry: ${industry || "local service business"}
 - Target Keywords: ${keywords || "main service + city"}
-
-RESEARCH TASKS (search for each):
-1. Visit/search ${full} — check HTTPS, robots.txt, sitemap.xml presence
-2. Search "${name} ${city}" — find GBP, rating, reviews, review dates
-3. Search "site:${clean}" — count indexed pages, check meta titles in snippets
-4. Search "${clean} meta description title" or view source hints via search snippets
-5. Search "${clean} schema LocalBusiness JSON-LD" — identify structured data
-6. Search "${name} ${city} Yelp" and "${name} site:yelp.com" — directory presence
-7. Search "${name} Facebook" and "${name} Instagram" — social profiles + activity
-8. Search "${name} backlinks" or "${clean}" on external sites — find who links to them
-9. Search "${name} ${city} review" on Google, Bing — reputation + response patterns
-10. Search "${keywords || industry + " " + city}" — see if ${name} appears; what competitors rank
-11. Search "${name} ${city} site:angi.com OR site:thumbtack.com OR site:bbb.org" — industry dirs
-12. Check if page loads over HTTPS and analyze any visible meta title/description in search snippets
 
 Return ONLY a raw JSON object. No markdown. No backticks. Start with { end with }.
 
