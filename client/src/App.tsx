@@ -105,6 +105,161 @@ function Nav() {
   );
 }
 
+function NeuralBackground() {
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return;
+
+    const reduceMotion = typeof window !== "undefined" &&
+      window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    let width = 0, height = 0, dpr = 1;
+    let nodes: { x: number; y: number; vx: number; vy: number; r: number; gold: boolean }[] = [];
+    let particles: { a: number; b: number; t: number; speed: number }[] = [];
+    let raf = 0;
+
+    const isMobile = () => window.innerWidth < 768;
+
+    function build() {
+      width = canvas!.clientWidth;
+      height = canvas!.clientHeight;
+      dpr = Math.min(window.devicePixelRatio || 1, 1.5);
+      canvas!.width = Math.floor(width * dpr);
+      canvas!.height = Math.floor(height * dpr);
+      ctx!.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+      const density = isMobile() ? 14000 : 9000;
+      const count = Math.max(18, Math.min(70, Math.floor((width * height) / density)));
+      nodes = Array.from({ length: count }, () => ({
+        x: Math.random() * width,
+        y: Math.random() * height,
+        vx: (Math.random() - 0.5) * 0.18,
+        vy: (Math.random() - 0.5) * 0.18,
+        r: Math.random() * 1.6 + 1,
+        gold: Math.random() < 0.22,
+      }));
+
+      const pCount = isMobile() ? 6 : 14;
+      particles = Array.from({ length: pCount }, () => ({
+        a: Math.floor(Math.random() * count),
+        b: Math.floor(Math.random() * count),
+        t: Math.random(),
+        speed: Math.random() * 0.004 + 0.0015,
+      }));
+    }
+
+    const LINK_DIST = () => (isMobile() ? 110 : 150);
+
+    function draw() {
+      ctx!.clearRect(0, 0, width, height);
+      const linkDist = LINK_DIST();
+
+      for (let i = 0; i < nodes.length; i++) {
+        const n = nodes[i];
+        n.x += n.vx; n.y += n.vy;
+        if (n.x < 0 || n.x > width) n.vx *= -1;
+        if (n.y < 0 || n.y > height) n.vy *= -1;
+      }
+
+      for (let i = 0; i < nodes.length; i++) {
+        for (let j = i + 1; j < nodes.length; j++) {
+          const a = nodes[i], b = nodes[j];
+          const dx = a.x - b.x, dy = a.y - b.y;
+          const dist = Math.sqrt(dx * dx + dy * dy);
+          if (dist < linkDist) {
+            const alpha = (1 - dist / linkDist) * 0.32;
+            const goldLink = a.gold || b.gold;
+            ctx!.strokeStyle = goldLink
+              ? `rgba(201,160,48,${alpha * 0.9})`
+              : `rgba(120,160,210,${alpha * 0.55})`;
+            ctx!.lineWidth = 1;
+            ctx!.beginPath();
+            ctx!.moveTo(a.x, a.y);
+            ctx!.lineTo(b.x, b.y);
+            ctx!.stroke();
+          }
+        }
+      }
+
+      for (const n of nodes) {
+        ctx!.beginPath();
+        ctx!.arc(n.x, n.y, n.r, 0, Math.PI * 2);
+        ctx!.fillStyle = n.gold ? "rgba(240,208,128,0.9)" : "rgba(160,195,235,0.55)";
+        ctx!.fill();
+        if (n.gold) {
+          ctx!.beginPath();
+          ctx!.arc(n.x, n.y, n.r * 3, 0, Math.PI * 2);
+          ctx!.fillStyle = "rgba(201,160,48,0.08)";
+          ctx!.fill();
+        }
+      }
+
+      for (const p of particles) {
+        const a = nodes[p.a], b = nodes[p.b];
+        if (!a || !b) continue;
+        const dx = a.x - b.x, dy = a.y - b.y;
+        const dist = Math.sqrt(dx * dx + dy * dy);
+        if (dist > linkDist * 1.4) {
+          p.a = Math.floor(Math.random() * nodes.length);
+          p.b = Math.floor(Math.random() * nodes.length);
+          p.t = 0;
+          continue;
+        }
+        p.t += p.speed;
+        if (p.t > 1) {
+          p.t = 0;
+          p.a = Math.floor(Math.random() * nodes.length);
+          p.b = Math.floor(Math.random() * nodes.length);
+          continue;
+        }
+        const px = a.x + (b.x - a.x) * p.t;
+        const py = a.y + (b.y - a.y) * p.t;
+        ctx!.beginPath();
+        ctx!.arc(px, py, 1.6, 0, Math.PI * 2);
+        ctx!.fillStyle = "rgba(240,208,128,0.95)";
+        ctx!.fill();
+      }
+
+      if (!reduceMotion) raf = requestAnimationFrame(draw);
+    }
+
+    build();
+    draw();
+
+    let resizeTimer: ReturnType<typeof setTimeout>;
+    const onResize = () => {
+      clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(() => {
+        build();
+        if (reduceMotion) draw();
+      }, 200);
+    };
+    window.addEventListener("resize", onResize);
+
+    return () => {
+      cancelAnimationFrame(raf);
+      window.removeEventListener("resize", onResize);
+      clearTimeout(resizeTimer);
+    };
+  }, []);
+
+  return (
+    <>
+      <canvas
+        ref={canvasRef}
+        style={{ position: "absolute", inset: 0, width: "100%", height: "100%", zIndex: 0, pointerEvents: "none" }}
+      />
+      <div style={{
+        position: "absolute", inset: 0, zIndex: 0, pointerEvents: "none",
+        background: `radial-gradient(ellipse at 30% 40%, rgba(10,22,40,0.45) 0%, rgba(10,10,10,0.72) 70%, rgba(10,10,10,0.85) 100%)`,
+      }} />
+    </>
+  );
+}
+
 function Hero() {
   return (
     <section style={{
@@ -116,11 +271,12 @@ function Hero() {
       position: "relative",
       overflow: "hidden",
     }}>
-      <div style={{ position: "absolute", top: "10%", right: "8%", width: 320, height: 320, borderRadius: "50%", border: `1px solid rgba(201,160,48,0.15)`, pointerEvents: "none" }} />
-      <div style={{ position: "absolute", top: "15%", right: "12%", width: 200, height: 200, borderRadius: "50%", border: `1px solid rgba(0,150,199,0.2)`, pointerEvents: "none" }} />
-      <div style={{ position: "absolute", bottom: "20%", left: "5%", width: 150, height: 150, borderRadius: "50%", background: `radial-gradient(circle, rgba(201,160,48,0.08) 0%, transparent 70%)`, pointerEvents: "none" }} />
+      <NeuralBackground />
+      <div style={{ position: "absolute", top: "10%", right: "8%", width: 320, height: 320, borderRadius: "50%", border: `1px solid rgba(201,160,48,0.15)`, pointerEvents: "none", zIndex: 0 }} />
+      <div style={{ position: "absolute", top: "15%", right: "12%", width: 200, height: 200, borderRadius: "50%", border: `1px solid rgba(0,150,199,0.2)`, pointerEvents: "none", zIndex: 0 }} />
+      <div style={{ position: "absolute", bottom: "20%", left: "5%", width: 150, height: 150, borderRadius: "50%", background: `radial-gradient(circle, rgba(201,160,48,0.08) 0%, transparent 70%)`, pointerEvents: "none", zIndex: 0 }} />
 
-      <div className="container" style={{ paddingTop: 100 }}>
+      <div className="container" style={{ paddingTop: 100, position: "relative", zIndex: 1 }}>
         <div className="fade-up" style={{ maxWidth: 680 }}>
           <div className="tag" style={{ background: "rgba(201,160,48,0.15)", color: COLORS.gold }}>
             Meet Aria — AI Voice Receptionist
