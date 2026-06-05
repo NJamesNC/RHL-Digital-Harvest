@@ -273,13 +273,9 @@ const CSS = `
 .rhl-hero__title{
   margin:0; color:#fff; font-weight:800;
   font-size:clamp(28px,5.1vw,62px); line-height:1.07; letter-spacing:-.02em;
-  max-width:17ch; text-shadow:0 2px 30px rgba(0,0,0,.5);
+  max-width:17ch; text-shadow:0 2px 10px rgba(0,0,0,.9),0 1px 28px rgba(0,0,0,.55);
 }
-.rhl-hero__title .g{
-  color:var(--gold);
-  background:linear-gradient(180deg,#E4CF77,#C9B45A);
-  -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent;
-}
+.rhl-hero__title .g{color:#fff;background:none;-webkit-text-fill-color:#fff;}
 .rhl-hero__sub{
   margin:0; color:rgba(255,255,255,.82); font-weight:500;
   font-size:clamp(15px,2.1vw,20px); letter-spacing:.01em;
